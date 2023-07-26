@@ -1,4 +1,5 @@
 const UserModel = require('../models/UsersModel')
+const bcrypt = require('bcrypt')
 
 //create user
 // const QueryCreateUser = async (user) => {
@@ -15,6 +16,11 @@ const QueryGetAllUsers = async () => {
 }
 //Updates user with id
 const QueryUpdateUserById =async (id, user) => {
+    if(user.password){
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(user.password, salt)
+        user.password = hashedPassword
+    }
     return await UserModel.findByIdAndUpdate(id, user, {new:true}).exec()
 }
 //Deletes user with id

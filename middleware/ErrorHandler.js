@@ -18,7 +18,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 
     //Handling mongoose Duplicate key error
     if (err.code === 11000) {
-        const message = `Duplicate ${Object.keys(err.keyValue)} entered`
+        const message = `${Object.keys(err.keyValue)} already exists`
         error = new Error(message)
     }
 

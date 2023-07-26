@@ -53,9 +53,15 @@ const GetUserById = async (req, res, next) => {
 
 const UpdateUserById = async (req, res, next) => {
     try {
+        const id = req.params.id
         if (!req.user.isAdmin && req.user.id !== id) {
             res.status(403)
             throw new Error("Not authorized")
+        }
+        if(req.body.password){
+            if(req.body.password.length < 8){
+                throw new Error("Password must be at least 8 characters long.")
+            }
         }
         const user = await UserService.QueryUpdateUserById(req.params.id, req.body)
         res.status(200).json(user)
@@ -70,6 +76,7 @@ const UpdateUserById = async (req, res, next) => {
 
 const DeleteUserById = async (req, res, next) => {
     try {
+        const id = req.params.id
         if (!req.user.isAdmin && req.user.id !== id) {
             res.status(403)
             throw new Error("Not authorized")
